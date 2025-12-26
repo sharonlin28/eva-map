@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-Hant"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;長榮航空航點地圖&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rel="stylesheet"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="</p>
+<p class="p1"><span class="Apple-converted-space">    </span>crossorigin=""</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html, body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#map {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.leaflet-popup-content-wrapper {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* 自訂 Icon 顏色 */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.red-dot {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #A00; /* 紅色，代表中心點 */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>left: -5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>top: -5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 2px solid #FFF;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 0 5px rgba(0,0,0,0.6);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="map"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script</p>
+<p class="p1"><span class="Apple-converted-space">    </span>src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="</p>
+<p class="p1"><span class="Apple-converted-space">    </span>crossorigin=""</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 台北（桃園 TPE）做為所有航點的距離基準點</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const TAIWAN_TPE = { name: "台北（桃園 TPE）", lat: 25.0797, lng: 121.2340 };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 自訂 Leaflet Icon（加入 html 確保 div 產生）</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const RedDotIcon = L.divIcon({</p>
+<p class="p1"><span class="Apple-converted-space">      </span>className: 'red-dot',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconSize: [10, 10],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconAnchor: [5, 5],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html: '&lt;span&gt;&lt;/span&gt;'</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const BlueDotIcon = L.icon({</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconSize: [25, 41],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>iconAnchor: [12, 41],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>popupAnchor: [1, -34],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>shadowSize: [41, 41]</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Haversine 公式計算兩點距離（公里）</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function haversineDistance(lat1, lon1, lat2, lon2) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const R = 6371;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const toRad = d =&gt; d * Math.PI / 180;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const dLat = toRad(lat2 - lat1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const dLon = toRad(lon2 - lon1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const a =</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Math.sin(dLat / 2) * Math.sin(dLat / 2) +</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Math.cos(toRad(lat1)) *</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Math.cos(toRad(lat2)) *</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Math.sin(dLon / 2) *</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Math.sin(dLon / 2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return R * c;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 航點資料（已含貨運 * 標註）</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const destinations = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 台灣 - 排除 TPE 作為目的地，但保留 TSA 和 KHH</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "台北（松山 TSA）", lat: 25.0696, lng: 121.5521 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "高雄（KHH）", lat: 22.5770, lng: 120.3500 },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 美洲</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "安克拉治 (ANC)*", lat: 61.1743, lng: -149.9985 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "亞特蘭大 (ATL)*", lat: 33.6407, lng: -84.4277 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "達拉斯 (DFW)", lat: 32.8998, lng: -97.0403 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "洛杉磯 (LAX)", lat: 33.9416, lng: -118.4085 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "紐約 (JFK)", lat: 40.6413, lng: -73.7781 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "芝加哥 (ORD)", lat: 41.9742, lng: -87.9073 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "西雅圖 (SEA)", lat: 47.4502, lng: -122.3088 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "舊金山 (SFO)", lat: 37.6213, lng: -122.3790 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "溫哥華 (YVR)", lat: 49.1967, lng: -123.1815 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "多倫多 (YYZ)", lat: 43.6777, lng: -79.6248 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "休士頓 (IAH)", lat: 29.9902, lng: -95.3368 },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 大洋洲</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "布里斯本 (BNE)", lat: -27.3842, lng: 153.1175 },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 歐洲</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "阿姆斯特丹 (AMS)", lat: 52.3105, lng: 4.7683 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "倫敦 (LHR)", lat: 51.4700, lng: -0.4543 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "維也納 (VIE)", lat: 48.1103, lng: 16.5697 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "巴黎 (CDG)", lat: 49.0097, lng: 2.5479 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "米蘭 (MXP)", lat: 45.6301, lng: 8.7231 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "慕尼黑 (MUC)", lat: 48.3538, lng: 11.7861 },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 亞洲/中國大陸</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "曼谷 (BKK)", lat: 13.6900, lng: 100.7501 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "雅加達 (CGK)", lat: -6.1256, lng: 106.6559 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "札幌 (CTS)", lat: 42.7752, lng: 141.6923 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "峇里島 (DPS)", lat: -8.7482, lng: 115.1675 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "福岡 (FUK)", lat: 33.5902, lng: 130.4510 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "河內 (HAN)", lat: 21.2210, lng: 105.8069 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "香港 (HKG)", lat: 22.3080, lng: 113.9185 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "首爾 (ICN)", lat: 37.4602, lng: 126.4407 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "大阪 (KIX)", lat: 34.4347, lng: 135.2442 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "小松 (KMQ)", lat: 36.3946, lng: 136.4069 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "吉隆坡 (KUL)", lat: 2.7456, lng: 101.7090 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "澳門 (MFM)", lat: 22.1496, lng: 113.5925 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "馬尼拉 (MNL)", lat: 14.5086, lng: 121.0198 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "成田 (NRT)", lat: 35.7719, lng: 140.3929 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "檳城 (PEN)*", lat: 5.2971, lng: 100.2760 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "金邊 (PNH)", lat: 11.5466, lng: 104.8440 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "仙台 (SDJ)", lat: 38.1397, lng: 140.9170 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "胡志明市 (SGN)", lat: 10.8188, lng: 106.6518 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "新加坡 (SIN)", lat: 1.3644, lng: 103.9915 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "羽田 (HND)", lat: 35.5494, lng: 139.7798 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "金浦 (GMP)", lat: 37.5583, lng: 126.7906 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "沖繩 (OKA)", lat: 26.2074, lng: 127.6460 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "宿霧 (CEB)", lat: 10.3089, lng: 123.9794 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "清邁 (CNX)", lat: 18.7668, lng: 98.9626 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "峴港 (DAD)", lat: 16.0439, lng: 108.1994 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "克拉克 (CRK)", lat: 15.1859, lng: 120.5600 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "愛媛松山 (MYJ)", lat: 33.8272, lng: 132.6997 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "青森 (AOJ)", lat: 40.7347, lng: 140.6908 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "神戶 (UKB)", lat: 34.6328, lng: 135.2239 },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 大陸</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "廣州 (CAN)", lat: 23.3924, lng: 113.2988 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "重慶 (CKG)*", lat: 29.7192, lng: 106.6417 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "鄭州 (CGO)", lat: 34.5197, lng: 113.8417 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "成都 (CTU)", lat: 30.5785, lng: 103.9471 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "杭州 (HGH)", lat: 30.2295, lng: 120.4345 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "桂林 (KWL)", lat: 25.2181, lng: 110.0392 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "寧波 (NGB)", lat: 29.8256, lng: 121.4650 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "北京 (PEK)", lat: 40.0801, lng: 116.5846 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "浦東 (PVG)", lat: 31.1443, lng: 121.8083 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "虹橋 (SHA)", lat: 31.1961, lng: 121.3297 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "濟南 (TNA)", lat: 36.8572, lng: 117.2159 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "天津 (TSN)", lat: 39.1244, lng: 117.3462 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "深圳 (SZX)*", lat: 22.6393, lng: 113.8107 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "廈門 (XMN)*", lat: 24.5440, lng: 118.1270 }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 建立地圖</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const map = L.map("map", {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>worldCopyJump: true</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}).setView([20, 110], 3);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 底圖</p>
+<p class="p1"><span class="Apple-converted-space">    </span>L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>maxZoom: 10,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>attribution: "&amp;copy; OpenStreetMap contributors"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}).addTo(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let openPopup = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 點擊地圖任意空白關閉文字顯示</p>
+<p class="p1"><span class="Apple-converted-space">    </span>map.on("click", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (openPopup) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>map.closePopup(openPopup);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>openPopup = null;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 1. 加入台灣中心點 TPE Marker (紅點 + 自訂 popup 控制)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tpeMarker = L.marker([TAIWAN_TPE.lat, TAIWAN_TPE.lng], { icon: RedDotIcon })</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.addTo(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>tpeMarker.on("click", function (e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (openPopup) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>map.closePopup(openPopup);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const popupContent =</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`&lt;div&gt;&lt;strong&gt;${TAIWAN_TPE.name}&lt;/strong&gt;&lt;br&gt;距離基準點&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const newPopup = L.popup({</p>
+<p class="p1"><span class="Apple-converted-space">        </span>closeButton: false,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>autoClose: false,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>closeOnClick: false,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>offset: [0, -5]</p>
+<p class="p1"><span class="Apple-converted-space">      </span>})</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setLatLng(e.latlng)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setContent(popupContent)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.openOn(map);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>openPopup = newPopup;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 2. 加上所有航點 marker (藍色圖釘)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>destinations.forEach(dest =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const distance = haversineDistance(</p>
+<p class="p1"><span class="Apple-converted-space">        </span>TAIWAN_TPE.lat,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>TAIWAN_TPE.lng,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>dest.lat,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>dest.lng</p>
+<p class="p1"><span class="Apple-converted-space">      </span>);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const distanceKm = Math.round(distance);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const isCargo = dest.name.includes('*'); // 檢查是否為貨運點</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const marker = L.marker([dest.lat, dest.lng], { icon: BlueDotIcon }).addTo(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const popupContent =</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`&lt;div&gt;&lt;strong&gt;${dest.name}&lt;/strong&gt;&lt;br&gt;` +</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`${isCargo ? '(僅貨運服務)' : ''}&lt;br&gt;` +</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`距離 TPE：約 &lt;strong&gt;${distanceKm}&lt;/strong&gt; 公里&lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>marker.on("click", function (e) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (openPopup) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>map.closePopup(openPopup);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const newPopup = L.popup({</p>
+<p class="p1"><span class="Apple-converted-space">          </span>closeButton: false,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>autoClose: false,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>closeOnClick: false,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>offset: [0, -10]</p>
+<p class="p1"><span class="Apple-converted-space">        </span>})</p>
+<p class="p1"><span class="Apple-converted-space">          </span>.setLatLng(e.latlng)</p>
+<p class="p1"><span class="Apple-converted-space">          </span>.setContent(popupContent)</p>
+<p class="p1"><span class="Apple-converted-space">          </span>.openOn(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>openPopup = newPopup;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
