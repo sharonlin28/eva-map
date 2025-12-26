@@ -1,270 +1,252 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
+  <meta charset="UTF-8" />
+  <title>長榮航空航點地圖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    .leaflet-popup-content-wrapper {
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* 自訂 Icon 顏色 */
+    .red-dot {
+      background-color: #A00; /* 紅色，代表中心點 */
+      width: 10px;
+      height: 10px;
+      display: block;
+      left: -5px;
+      top: -5px;
+      position: relative;
+      border-radius: 50%;
+      border: 2px solid #FFF;
+      box-shadow: 0 0 5px rgba(0,0,0,0.6);
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="zh-Hant"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;長榮航空航點地圖&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;link</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>rel="stylesheet"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>crossorigin=""</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>/&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>html, body {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>height: 100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>width: 100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>#map {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>height: 100vh;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>width: 100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.leaflet-popup-content-wrapper {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size: 14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>text-align: center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>/* 自訂 Icon 顏色 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.red-dot {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background-color: #A00; /* 紅色，代表中心點 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>width: 10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>height: 10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display: block;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>left: -5px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>top: -5px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>position: relative;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-radius: 50%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border: 2px solid #FFF;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>box-shadow: 0 0 5px rgba(0,0,0,0.6);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="map"&gt;&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>crossorigin=""</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 台北（桃園 TPE）做為所有航點的距離基準點</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const TAIWAN_TPE = { name: "台北（桃園 TPE）", lat: 25.0797, lng: 121.2340 };</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 自訂 Leaflet Icon（加入 html 確保 div 產生）</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const RedDotIcon = L.divIcon({</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>className: 'red-dot',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconSize: [10, 10],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconAnchor: [5, 5],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>html: '&lt;span&gt;&lt;/span&gt;'</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const BlueDotIcon = L.icon({</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconSize: [25, 41],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>iconAnchor: [12, 41],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>popupAnchor: [1, -34],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>shadowSize: [41, 41]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Haversine 公式計算兩點距離（公里）</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function haversineDistance(lat1, lon1, lat2, lon2) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const R = 6371;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const toRad = d =&gt; d * Math.PI / 180;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const dLat = toRad(lat2 - lat1);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const dLon = toRad(lat2 - lon1);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const a =</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Math.sin(dLat / 2) * Math.sin(dLat / 2) +</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Math.cos(toRad(lat1)) *</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>Math.cos(toRad(lat2)) *</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>Math.sin(dLon / 2) *</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>Math.sin(dLon / 2);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return R * c;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 航點資料（已含貨運 * 標註）</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const destinations = [</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 台灣 - 排除 TPE 作為目的地，但保留 TSA 和 KHH</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "台北（松山 TSA）", lat: 25.0696, lng: 121.5521 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "高雄（KHH）", lat: 22.5770, lng: 120.3500 },</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 美洲</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "安克拉治 (ANC)*", lat: 61.1743, lng: -149.9985 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "亞特蘭大 (ATL)*", lat: 33.6407, lng: -84.4277 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "達拉斯 (DFW)", lat: 32.8998, lng: -97.0403 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "洛杉磯 (LAX)", lat: 33.9416, lng: -118.4085 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "紐約 (JFK)", lat: 40.6413, lng: -73.7781 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "芝加哥 (ORD)", lat: 41.9742, lng: -87.9073 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "西雅圖 (SEA)", lat: 47.4502, lng: -122.3088 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "舊金山 (SFO)", lat: 37.6213, lng: -122.3790 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "溫哥華 (YVR)", lat: 49.1967, lng: -123.1815 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "多倫多 (YYZ)", lat: 43.6777, lng: -79.6248 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "休士頓 (IAH)", lat: 29.9902, lng: -95.3368 },</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 大洋洲</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "布里斯本 (BNE)", lat: -27.3842, lng: 153.1175 },</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 歐洲</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "阿姆斯特丹 (AMS)", lat: 52.3105, lng: 4.7683 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "倫敦 (LHR)", lat: 51.4700, lng: -0.4543 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "維也納 (VIE)", lat: 48.1103, lng: 16.5697 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "巴黎 (CDG)", lat: 49.0097, lng: 2.5479 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "米蘭 (MXP)", lat: 45.6301, lng: 8.7231 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "慕尼黑 (MUC)", lat: 48.3538, lng: 11.7861 },</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 亞洲/中國大陸</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "曼谷 (BKK)", lat: 13.6900, lng: 100.7501 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "雅加達 (CGK)", lat: -6.1256, lng: 106.6559 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "札幌 (CTS)", lat: 42.7752, lng: 141.6923 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "峇里島 (DPS)", lat: -8.7482, lng: 115.1675 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "福岡 (FUK)", lat: 33.5902, lng: 130.4510 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "河內 (HAN)", lat: 21.2210, lng: 105.8069 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "香港 (HKG)", lat: 22.3080, lng: 113.9185 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "首爾 (ICN)", lat: 37.4602, lng: 126.4407 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "大阪 (KIX)", lat: 34.4347, lng: 135.2442 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "小松 (KMQ)", lat: 36.3946, lng: 136.4069 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "吉隆坡 (KUL)", lat: 2.7456, lng: 101.7090 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "澳門 (MFM)", lat: 22.1496, lng: 113.5925 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "馬尼拉 (MNL)", lat: 14.5086, lng: 121.0198 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "成田 (NRT)", lat: 35.7719, lng: 140.3929 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "檳城 (PEN)*", lat: 5.2971, lng: 100.2760 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "金邊 (PNH)", lat: 11.5466, lng: 104.8440 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "仙台 (SDJ)", lat: 38.1397, lng: 140.9170 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "胡志明市 (SGN)", lat: 10.8188, lng: 106.6518 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "新加坡 (SIN)", lat: 1.3644, lng: 103.9915 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "羽田 (HND)", lat: 35.5494, lng: 139.7798 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "金浦 (GMP)", lat: 37.5583, lng: 126.7906 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "沖繩 (OKA)", lat: 26.2074, lng: 127.6460 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "宿霧 (CEB)", lat: 10.3089, lng: 123.9794 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "清邁 (CNX)", lat: 18.7668, lng: 98.9626 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "峴港 (DAD)", lat: 16.0439, lng: 108.1994 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "克拉克 (CRK)", lat: 15.1859, lng: 120.5600 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "愛媛松山 (MYJ)", lat: 33.8272, lng: 132.6997 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "青森 (AOJ)", lat: 40.7347, lng: 140.6908 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "神戶 (UKB)", lat: 34.6328, lng: 135.2239 },</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 大陸</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "廣州 (CAN)", lat: 23.3924, lng: 113.2988 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "重慶 (CKG)*", lat: 29.7192, lng: 106.6417 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "鄭州 (CGO)", lat: 34.5197, lng: 113.8417 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "成都 (CTU)", lat: 30.5785, lng: 103.9471 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "杭州 (HGH)", lat: 30.2295, lng: 120.4345 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "桂林 (KWL)", lat: 25.2181, lng: 110.0392 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "寧波 (NGB)", lat: 29.8256, lng: 121.4650 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "北京 (PEK)", lat: 40.0801, lng: 116.5846 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "浦東 (PVG)", lat: 31.1443, lng: 121.8083 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "虹橋 (SHA)", lat: 31.1961, lng: 121.3297 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "濟南 (TNA)", lat: 36.8572, lng: 117.2159 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "天津 (TSN)", lat: 39.1244, lng: 117.3462 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "深圳 (SZX)*", lat: 22.6393, lng: 113.8107 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{ name: "廈門 (XMN)*", lat: 24.5440, lng: 118.1270 }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 建立地圖</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const map = L.map("map", {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>worldCopyJump: true</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}).setView([20, 110], 3);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 底圖</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>maxZoom: 10,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>attribution: "&amp;copy; OpenStreetMap contributors"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}).addTo(map);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>let openPopup = null;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 點擊地圖任意空白關閉文字顯示</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>map.on("click", function () {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (openPopup) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>map.closePopup(openPopup);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>openPopup = null;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 1. 加入台灣中心點 TPE Marker (紅點 + 自訂 popup 控制)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const tpeMarker = L.marker([TAIWAN_TPE.lat, TAIWAN_TPE.lng], { icon: RedDotIcon })</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.addTo(map);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>tpeMarker.on("click", function (e) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (openPopup) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>map.closePopup(openPopup);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const popupContent =</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>`&lt;div&gt;&lt;strong&gt;${TAIWAN_TPE.name}&lt;/strong&gt;&lt;br&gt;距離基準點&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const newPopup = L.popup({</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>closeButton: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>autoClose: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>closeOnClick: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>offset: [0, -5]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>})</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.setLatLng(e.latlng)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.setContent(popupContent)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.openOn(map);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>openPopup = newPopup;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// 2. 加上所有航點 marker (藍色圖釘)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>destinations.forEach(dest =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const distance = haversineDistance(</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>TAIWAN_TPE.lat,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>TAIWAN_TPE.lng,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>dest.lat,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>dest.lng</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const distanceKm = Math.round(distance);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const isCargo = dest.name.includes('*'); // 檢查是否為貨運點</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const marker = L.marker([dest.lat, dest.lng], { icon: BlueDotIcon }).addTo(map);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const popupContent =</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>`&lt;div&gt;&lt;strong&gt;${dest.name}&lt;/strong&gt;&lt;br&gt;` +</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>`${isCargo ? '(僅貨運服務)' : ''}&lt;br&gt;` +</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>`距離 TPE：約 &lt;strong&gt;${distanceKm}&lt;/strong&gt; 公里&lt;/div&gt;`;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>marker.on("click", function (e) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (openPopup) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>map.closePopup(openPopup);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const newPopup = L.popup({</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>closeButton: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>autoClose: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>closeOnClick: false,</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>offset: [0, -10]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>})</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.setLatLng(e.latlng)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.setContent(popupContent)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.openOn(map);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>openPopup = newPopup;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
+  <div id="map"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    // 台北（桃園 TPE）做為所有航點的距離基準點
+    const TAIWAN_TPE = { name: "台北（桃園 TPE）", lat: 25.0797, lng: 121.2340 };
+
+    // 自訂 Leaflet Icon（加入 html 確保 div 產生）
+    const RedDotIcon = L.divIcon({
+      className: 'red-dot',
+      iconSize: [10, 10],
+      iconAnchor: [5, 5],
+      html: '<span></span>'
+    });
+
+    const BlueDotIcon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    // Haversine 公式計算兩點距離（公里）
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const toRad = d => d * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lat2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) *
+          Math.cos(toRad(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    // 航點資料（已含貨運 * 標註）
+    const destinations = [
+      // 台灣 - 排除 TPE 作為目的地，但保留 TSA 和 KHH
+      { name: "台北（松山 TSA）", lat: 25.0696, lng: 121.5521 },
+      { name: "高雄（KHH）", lat: 22.5770, lng: 120.3500 },
+
+      // 美洲
+      { name: "安克拉治 (ANC)*", lat: 61.1743, lng: -149.9985 },
+      { name: "亞特蘭大 (ATL)*", lat: 33.6407, lng: -84.4277 },
+      { name: "達拉斯 (DFW)", lat: 32.8998, lng: -97.0403 },
+      { name: "洛杉磯 (LAX)", lat: 33.9416, lng: -118.4085 },
+      { name: "紐約 (JFK)", lat: 40.6413, lng: -73.7781 },
+      { name: "芝加哥 (ORD)", lat: 41.9742, lng: -87.9073 },
+      { name: "西雅圖 (SEA)", lat: 47.4502, lng: -122.3088 },
+      { name: "舊金山 (SFO)", lat: 37.6213, lng: -122.3790 },
+      { name: "溫哥華 (YVR)", lat: 49.1967, lng: -123.1815 },
+      { name: "多倫多 (YYZ)", lat: 43.6777, lng: -79.6248 },
+      { name: "休士頓 (IAH)", lat: 29.9902, lng: -95.3368 },
+
+      // 大洋洲
+      { name: "布里斯本 (BNE)", lat: -27.3842, lng: 153.1175 },
+
+      // 歐洲
+      { name: "阿姆斯特丹 (AMS)", lat: 52.3105, lng: 4.7683 },
+      { name: "倫敦 (LHR)", lat: 51.4700, lng: -0.4543 },
+      { name: "維也納 (VIE)", lat: 48.1103, lng: 16.5697 },
+      { name: "巴黎 (CDG)", lat: 49.0097, lng: 2.5479 },
+      { name: "米蘭 (MXP)", lat: 45.6301, lng: 8.7231 },
+      { name: "慕尼黑 (MUC)", lat: 48.3538, lng: 11.7861 },
+
+      // 亞洲/中國大陸
+      { name: "曼谷 (BKK)", lat: 13.6900, lng: 100.7501 },
+      { name: "雅加達 (CGK)", lat: -6.1256, lng: 106.6559 },
+      { name: "札幌 (CTS)", lat: 42.7752, lng: 141.6923 },
+      { name: "峇里島 (DPS)", lat: -8.7482, lng: 115.1675 },
+      { name: "福岡 (FUK)", lat: 33.5902, lng: 130.4510 },
+      { name: "河內 (HAN)", lat: 21.2210, lng: 105.8069 },
+      { name: "香港 (HKG)", lat: 22.3080, lng: 113.9185 },
+      { name: "首爾 (ICN)", lat: 37.4602, lng: 126.4407 },
+      { name: "大阪 (KIX)", lat: 34.4347, lng: 135.2442 },
+      { name: "小松 (KMQ)", lat: 36.3946, lng: 136.4069 },
+      { name: "吉隆坡 (KUL)", lat: 2.7456, lng: 101.7090 },
+      { name: "澳門 (MFM)", lat: 22.1496, lng: 113.5925 },
+      { name: "馬尼拉 (MNL)", lat: 14.5086, lng: 121.0198 },
+      { name: "成田 (NRT)", lat: 35.7719, lng: 140.3929 },
+      { name: "檳城 (PEN)*", lat: 5.2971, lng: 100.2760 },
+      { name: "金邊 (PNH)", lat: 11.5466, lng: 104.8440 },
+      { name: "仙台 (SDJ)", lat: 38.1397, lng: 140.9170 },
+      { name: "胡志明市 (SGN)", lat: 10.8188, lng: 106.6518 },
+      { name: "新加坡 (SIN)", lat: 1.3644, lng: 103.9915 },
+      { name: "羽田 (HND)", lat: 35.5494, lng: 139.7798 },
+      { name: "金浦 (GMP)", lat: 37.5583, lng: 126.7906 },
+      { name: "沖繩 (OKA)", lat: 26.2074, lng: 127.6460 },
+      { name: "宿霧 (CEB)", lat: 10.3089, lng: 123.9794 },
+      { name: "清邁 (CNX)", lat: 18.7668, lng: 98.9626 },
+      { name: "峴港 (DAD)", lat: 16.0439, lng: 108.1994 },
+      { name: "克拉克 (CRK)", lat: 15.1859, lng: 120.5600 },
+      { name: "愛媛松山 (MYJ)", lat: 33.8272, lng: 132.6997 },
+      { name: "青森 (AOJ)", lat: 40.7347, lng: 140.6908 },
+      { name: "神戶 (UKB)", lat: 34.6328, lng: 135.2239 },
+
+      // 大陸
+      { name: "廣州 (CAN)", lat: 23.3924, lng: 113.2988 },
+      { name: "重慶 (CKG)*", lat: 29.7192, lng: 106.6417 },
+      { name: "鄭州 (CGO)", lat: 34.5197, lng: 113.8417 },
+      { name: "成都 (CTU)", lat: 30.5785, lng: 103.9471 },
+      { name: "杭州 (HGH)", lat: 30.2295, lng: 120.4345 },
+      { name: "桂林 (KWL)", lat: 25.2181, lng: 110.0392 },
+      { name: "寧波 (NGB)", lat: 29.8256, lng: 121.4650 },
+      { name: "北京 (PEK)", lat: 40.0801, lng: 116.5846 },
+      { name: "浦東 (PVG)", lat: 31.1443, lng: 121.8083 },
+      { name: "虹橋 (SHA)", lat: 31.1961, lng: 121.3297 },
+      { name: "濟南 (TNA)", lat: 36.8572, lng: 117.2159 },
+      { name: "天津 (TSN)", lat: 39.1244, lng: 117.3462 },
+      { name: "深圳 (SZX)*", lat: 22.6393, lng: 113.8107 },
+      { name: "廈門 (XMN)*", lat: 24.5440, lng: 118.1270 }
+    ];
+
+    // 建立地圖
+    const map = L.map("map", {
+      worldCopyJump: true
+    }).setView([20, 110], 3);
+
+    // 底圖
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 10,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    let openPopup = null;
+
+    // 點擊地圖任意空白關閉文字顯示
+    map.on("click", function () {
+      if (openPopup) {
+        map.closePopup(openPopup);
+        openPopup = null;
+      }
+    });
+
+    // 1. 加入台灣中心點 TPE Marker (紅點 + 自訂 popup 控制)
+    const tpeMarker = L.marker([TAIWAN_TPE.lat, TAIWAN_TPE.lng], { icon: RedDotIcon })
+      .addTo(map);
+
+    tpeMarker.on("click", function (e) {
+      if (openPopup) {
+        map.closePopup(openPopup);
+      }
+      const popupContent =
+        `<div><strong>${TAIWAN_TPE.name}</strong><br>距離基準點</div>`;
+      const newPopup = L.popup({
+        closeButton: false,
+        autoClose: false,
+        closeOnClick: false,
+        offset: [0, -5]
+      })
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
+      openPopup = newPopup;
+    });
+
+    // 2. 加上所有航點 marker (藍色圖釘)
+    destinations.forEach(dest => {
+      const distance = haversineDistance(
+        TAIWAN_TPE.lat,
+        TAIWAN_TPE.lng,
+        dest.lat,
+        dest.lng
+      );
+      const distanceKm = Math.round(distance);
+
+      const isCargo = dest.name.includes('*'); // 檢查是否為貨運點
+
+      const marker = L.marker([dest.lat, dest.lng], { icon: BlueDotIcon }).addTo(map);
+
+      const popupContent =
+        `<div><strong>${dest.name}</strong><br>` +
+        `${isCargo ? '(僅貨運服務)' : ''}<br>` +
+        `距離 TPE：約 <strong>${distanceKm}</strong> 公里</div>`;
+
+      marker.on("click", function (e) {
+        if (openPopup) {
+          map.closePopup(openPopup);
+        }
+
+        const newPopup = L.popup({
+          closeButton: false,
+          autoClose: false,
+          closeOnClick: false,
+          offset: [0, -10]
+        })
+          .setLatLng(e.latlng)
+          .setContent(popupContent)
+          .openOn(map);
+
+        openPopup = newPopup;
+      });
+    });
+  </script>
 </body>
 </html>
